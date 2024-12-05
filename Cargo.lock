@@ -205,6 +205,8 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "env_logger",
+ "serde",
+ "serde_json",
  "simplex-chat",
  "tokio",
 ]

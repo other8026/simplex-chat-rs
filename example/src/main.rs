@@ -1,4 +1,3 @@
-
 use anyhow::Result;
 use simplex_chat::ChatClient;
 
@@ -7,8 +6,8 @@ async fn main() -> Result<()> {
     env_logger::init();
     let mut chat = ChatClient::start("ws://localhost:5225").await?;
 
-    let resp = chat.send_command("/u").await?;
-    println!("Response: {:?}", resp);
+    let resp = chat.send_command("/chats").await?;
+    println!("Response: {:#?}", resp);
 
     Ok(())
 }

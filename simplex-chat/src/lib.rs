@@ -55,6 +55,27 @@ pub enum ChatResponse {
     ActiveUser {
         user: User,
     },
+    UsersList {
+        users: Vec<UserInfo>,
+    },
+    ChatStarted {
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, Value>,
+    },
+    ChatRunning {
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, Value>,
+    },
+    ChatStopped {
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, Value>,
+    },
+    Chats {
+        // user: User,
+        chats: Vec<Chat>,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, Value>,
+    },
     #[serde(untagged)]
     Unknown(Value),
 }
