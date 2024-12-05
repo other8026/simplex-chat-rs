@@ -1,0 +1,13 @@
+[package]
+name = "simplex-chat"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.93"
+futures-util = "0.3.31"
+log = "0.4.22"
+serde = { version = "1.0.215", features = ["derive"] }
+serde_json = "1.0.133"
+tokio = { version = "1.41.1", features = ["rt", "net", "sync"] }
+tokio-tungstenite = "0.24.0"

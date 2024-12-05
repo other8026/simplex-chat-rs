@@ -1,0 +1,3 @@
+[workspace]
+members = ["example", "simplex-chat"]
+resolver = "2"
