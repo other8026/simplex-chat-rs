@@ -1,8 +1,11 @@
+mod response;
+
 use anyhow::Result;
 use futures_util::{
     stream::{SplitSink, SplitStream},
     SinkExt, StreamExt,
 };
+pub use response::*;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{
@@ -38,19 +41,19 @@ struct ChatSrvRequest {
     cmd: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct ChatSrvResponse {
     corr_id: Option<CorrId>,
     resp: ChatResponse,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(tag = "type")]
 #[serde(rename_all = "camelCase")]
 pub enum ChatResponse {
     ActiveUser {
-        user: Value,
+        user: User,
     },
     #[serde(untagged)]
     Unknown(Value),
