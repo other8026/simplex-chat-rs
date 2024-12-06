@@ -77,6 +77,8 @@ pub enum ChatInfo {
 #[serde(rename_all = "camelCase")]
 pub struct ChatItem {
     // chat_dir: CIDirection,
+    #[serde(flatten)]
+    _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

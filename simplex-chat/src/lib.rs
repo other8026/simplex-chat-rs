@@ -1,11 +1,12 @@
-mod response;
+mod responses;
+mod types;
 
 use anyhow::Result;
 use futures_util::{
     stream::{SplitSink, SplitStream},
     SinkExt, StreamExt,
 };
-pub use response::*;
+pub use responses::*;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{
@@ -46,38 +47,6 @@ struct ChatSrvRequest {
 struct ChatSrvResponse {
     corr_id: Option<CorrId>,
     resp: ChatResponse,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(tag = "type")]
-#[serde(rename_all = "camelCase")]
-pub enum ChatResponse {
-    ActiveUser {
-        user: User,
-    },
-    UsersList {
-        users: Vec<UserInfo>,
-    },
-    ChatStarted {
-        #[serde(flatten)]
-        _unknown_fields: HashMap<String, Value>,
-    },
-    ChatRunning {
-        #[serde(flatten)]
-        _unknown_fields: HashMap<String, Value>,
-    },
-    ChatStopped {
-        #[serde(flatten)]
-        _unknown_fields: HashMap<String, Value>,
-    },
-    Chats {
-        // user: User,
-        chats: Vec<Chat>,
-        #[serde(flatten)]
-        _unknown_fields: HashMap<String, Value>,
-    },
-    #[serde(untagged)]
-    Unknown(Value),
 }
 
 impl ChatClient {
