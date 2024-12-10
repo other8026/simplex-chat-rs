@@ -222,6 +222,18 @@ impl ChatClient {
             }
         }
     }
+
+    pub async fn api_create_user_address(&mut self) -> Result<String> {
+        let resp = self.send_command("/address").await?;
+        let ChatResponse::UserContactLinkCreated {
+            conn_req_contact, ..
+        } = resp
+        else {
+            bail!("The command response does not match the expected type");
+        };
+
+        Ok(conn_req_contact)
+    }
 }
 
 impl Drop for ChatClient {

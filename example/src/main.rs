@@ -10,9 +10,12 @@ async fn main() -> Result<()> {
     // println!("Response: {:#?}", resp);
 
     let user = chat.api_get_active_user().await?;
-    // println!("Active User: {:?}", user);
+    println!("Active User: {:?}", user);
 
-    let address = chat.api_get_user_address().await?;
+    let address = match chat.api_get_user_address().await? {
+        Some(addr) => addr,
+        None => chat.api_create_user_address().await?,
+    };
     println!("Address: {:?}", address);
 
     // let chats = chat.api_chats().await?;
