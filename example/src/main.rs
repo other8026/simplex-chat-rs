@@ -9,5 +9,8 @@ async fn main() -> Result<()> {
     let resp = chat.send_command("/chats").await?;
     println!("Response: {:#?}", resp);
 
+    chat.listen(|srv_resp| println!("NEW SERVER MESSAGE: {:?}", srv_resp))
+        .await;
+
     Ok(())
 }

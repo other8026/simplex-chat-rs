@@ -33,6 +33,7 @@ pub struct ChatClient {
     write_stream: SplitSink<ChatWebSocket, Message>,
     listener_handle: JoinHandle<()>,
     command_waiters: Arc<Mutex<HashMap<CorrId, mpsc::Sender<ChatResponse>>>>,
+    message_queue: mpsc::Receiver<ChatSrvResponse>, // Note that command_waiters has precedence over message_queue
 }
 
 #[derive(Serialize, Debug)]
@@ -44,7 +45,7 @@ struct ChatSrvRequest {
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct ChatSrvResponse {
+pub struct ChatSrvResponse {
     corr_id: Option<CorrId>,
     resp: ChatResponse,
 }
@@ -69,8 +70,9 @@ impl ChatClient {
         let command_waiters = Arc::new(Mutex::new(HashMap::new()));
         let command_waiters_copy = command_waiters.clone();
         let uri_copy = uri.to_owned();
+        let (tx, rx) = mpsc::channel::<ChatSrvResponse>();
         let listener_handle = tokio::spawn(async {
-            Self::message_listener(read_stream, uri_copy, command_waiters_copy).await
+            Self::message_listener(read_stream, uri_copy, command_waiters_copy, tx).await
         });
 
         let client = ChatClient {
@@ -79,6 +81,7 @@ impl ChatClient {
             write_stream,
             listener_handle,
             command_waiters,
+            message_queue: rx,
             timeout: Duration::from_millis(3000),
         };
 
@@ -89,6 +92,7 @@ impl ChatClient {
         read_stream: SplitStream<ChatWebSocket>,
         uri: String,
         command_waiters: Arc<Mutex<HashMap<CorrId, mpsc::Sender<ChatResponse>>>>,
+        message_queue: mpsc::Sender<ChatSrvResponse>,
     ) {
         read_stream
             .for_each(|message| async {
@@ -99,18 +103,24 @@ impl ChatClient {
 
                 log::trace!("Deserialized server resposne: {:?}", srv_resp);
 
-                // No handlers for this corr_id
-                let Some(corr_id) = srv_resp.corr_id else {
-                    return;
-                };
-
-                let command_waiters = command_waiters.lock().unwrap();
-                match command_waiters.get(&corr_id) {
-                    Some(chan) => {
-                        chan.send(srv_resp.resp).unwrap();
+                match srv_resp.corr_id {
+                    Some(ref corr_id) => {
+                        // Send message to command waiter (if there is one),
+                        // or just forward it to the message queue as well
+                        let command_waiters = command_waiters.lock().unwrap();
+                        match command_waiters.get(corr_id) {
+                            Some(chan) => {
+                                chan.send(srv_resp.resp).unwrap();
+                            }
+                            None => message_queue.send(srv_resp).unwrap(),
+                        }
                     }
-                    None => {}
-                }
+                    None => {
+                        // No corrId means the message was not result of a command,
+                        // so just put it in the queue right away
+                        message_queue.send(srv_resp).unwrap()
+                    }
+                };
             })
             .await;
     }
@@ -173,6 +183,13 @@ impl ChatClient {
         let resp = resp?;
 
         Ok(resp)
+    }
+
+    pub async fn listen(&mut self, message_listener_callback: impl Fn(ChatSrvResponse) -> ()) {
+        loop {
+            let message = self.message_queue.recv().unwrap();
+            message_listener_callback(message);
+        }
     }
 }
 
