@@ -1,14 +1,13 @@
 mod responses;
 mod types;
 
-use anyhow::Result;
+use anyhow::{bail, Result};
 use futures_util::{
     stream::{SplitSink, SplitStream},
     SinkExt, StreamExt,
 };
 pub use responses::*;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use std::{
     collections::HashMap,
     sync::{
@@ -189,6 +188,38 @@ impl ChatClient {
         loop {
             let message = self.message_queue.recv().unwrap();
             message_listener_callback(message);
+        }
+    }
+
+    // Simplified APIs
+    pub async fn api_get_active_user(&mut self) -> Result<User> {
+        let resp = self.send_command("/u").await?;
+        let ChatResponse::ActiveUser { user, .. } = resp else {
+            bail!("The command response does not match the expected type");
+        };
+
+        Ok(user)
+    }
+
+    pub async fn api_chats(&mut self) -> Result<Vec<Chat>> {
+        let resp = self.send_command("/chats").await?;
+        let ChatResponse::Chats { chats, .. } = resp else {
+            bail!("The command response does not match the expected type");
+        };
+
+        Ok(chats)
+    }
+
+    pub async fn api_get_user_address(&mut self) -> Result<Option<String>> {
+        let resp = self.send_command("/show_address").await?;
+        match resp {
+            ChatResponse::UserContactLink { contact_link, .. } => {
+                Ok(Some(contact_link.conn_req_contact))
+            }
+            ChatResponse::ChatCmdError { .. } => Ok(None),
+            _ => {
+                bail!("The command response does not match the expected type");
+            }
         }
     }
 }

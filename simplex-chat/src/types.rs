@@ -5,55 +5,55 @@ use std::collections::HashMap;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct LocalProfile {
-    profile_id: u64,
-    display_name: String,
-    full_name: String,
-    image: Option<String>,
-    contact_link: Option<String>,
-    local_alias: String,
+    pub profile_id: u64,
+    pub display_name: String,
+    pub full_name: String,
+    pub image: Option<String>,
+    pub contact_link: Option<String>,
+    pub local_alias: String,
     #[serde(flatten)]
-    _unknown_fields: HashMap<String, JsonValue>,
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
-    user_id: u64,
-    agent_user_id: String,
-    user_contact_id: u64,
-    local_display_name: String,
-    profile: LocalProfile,
-    active_user: bool,
+    pub user_id: u64,
+    pub agent_user_id: String,
+    pub user_contact_id: u64,
+    pub local_display_name: String,
+    pub profile: LocalProfile,
+    pub active_user: bool,
     // view_pwd_hash: String, // Declared in the typescript API, but not sent by server
-    show_ntfs: bool,
+    pub show_ntfs: bool,
     #[serde(flatten)]
-    _unknown_fields: HashMap<String, JsonValue>,
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct UserInfo {
-    user: User,
-    unread_count: u64,
+    pub user: User,
+    pub unread_count: u64,
     #[serde(flatten)]
-    _unknown_fields: HashMap<String, JsonValue>,
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Contact {
-    contact_id: u64,
-    local_display_name: String,
+    pub contact_id: u64,
+    pub local_display_name: String,
     // profile: Profile,
     // active_conn: Connection,
-    via_group: Option<u64>,
+    pub via_group: Option<u64>,
     // created_at: Date,
     #[serde(flatten)]
-    _unknown_fields: HashMap<String, JsonValue>,
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
 #[serde(tag = "type")]
 pub enum ChatInfo {
     Direct {
@@ -78,15 +78,86 @@ pub enum ChatInfo {
 pub struct ChatItem {
     // chat_dir: CIDirection,
     #[serde(flatten)]
-    _unknown_fields: HashMap<String, JsonValue>,
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Chat {
-    chat_info: ChatInfo,
+    pub chat_info: ChatInfo,
     // chat_items: Vec<ChatItem>,
     // chat_stats: ChatStats,
     #[serde(flatten)]
-    _unknown_fields: HashMap<String, JsonValue>,
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct UserContactLink {
+    pub conn_req_contact: String,
+    pub auto_accept: Option<AutoAccept>,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct AutoAccept {
+    pub accept_incognito: bool,
+    pub auto_reply: Option<MsgContent>,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+pub enum MsgContent {
+    Text {
+        text: String,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    Link {
+        text: String,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    Image {
+        image: String, // Base64 string
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    File {
+        text: String,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    Unknown(JsonValue),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+#[serde(tag = "type")]
+pub enum ChatError {
+    Error {
+        error_type: ChatErrorType,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    ErrorAgent {
+        agent_error: JsonValue,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    ErrorStore {
+        store_error: JsonValue,
+    },
+    Unknown(JsonValue),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+pub enum ChatErrorType {
+    NoActiveUser,
+    ActiveUserExists,
 }

@@ -5,19 +5,30 @@ use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(tag = "type")]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
 pub enum ChatResponse {
     ActiveUser {
         user: User,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
     },
-    UsersList {
-        users: Vec<UserInfo>,
+    ChatError {
+        user_: Option<User>,
+        chat_error: ChatError,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
     },
-    ChatStarted {
+    ChatCmdError {
+        user_: Option<User>,
+        chat_error: ChatError,
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
     ChatRunning {
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    ChatStarted {
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
@@ -28,6 +39,17 @@ pub enum ChatResponse {
     Chats {
         // user: User,
         chats: Vec<Chat>,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    UserContactLink {
+        user: User,
+        contact_link: UserContactLink,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    UsersList {
+        users: Vec<UserInfo>,
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
