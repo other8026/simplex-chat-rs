@@ -2,6 +2,14 @@
 name = "simplex-chat"
 version = "0.1.0"
 edition = "2021"
+authors = ["rdbo"]
+description = "API for the SimpleX Chat CLI"
+readme = "README.md"
+homepage = "https://github.com/rdbo/simplex-chat-rs"
+repository = "https://github.com/rdbo/simplex-chat-rs"
+license = "AGPL-3.0-only"
+keywords = ["chat", "bot", "simplex", "client", "api"]
+categories = ["web-programming::websocket", "asynchronous", "api-bindings"]
 
 [dependencies]
 anyhow = "1.0.93"
