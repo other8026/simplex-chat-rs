@@ -43,7 +43,7 @@ struct ChatSrvRequest {
     cmd: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChatSrvResponse {
     corr_id: Option<CorrId>,

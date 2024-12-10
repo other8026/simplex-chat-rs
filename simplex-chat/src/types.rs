@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct LocalProfile {
     profile_id: u64,
@@ -15,7 +15,7 @@ pub struct LocalProfile {
     _unknown_fields: HashMap<String, JsonValue>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
     user_id: u64,
@@ -30,7 +30,7 @@ pub struct User {
     _unknown_fields: HashMap<String, JsonValue>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct UserInfo {
     user: User,
@@ -39,7 +39,7 @@ pub struct UserInfo {
     _unknown_fields: HashMap<String, JsonValue>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Contact {
     contact_id: u64,
@@ -52,7 +52,7 @@ pub struct Contact {
     _unknown_fields: HashMap<String, JsonValue>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 #[serde(tag = "type")]
 pub enum ChatInfo {
@@ -73,7 +73,7 @@ pub enum ChatInfo {
     Unknown(JsonValue),
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChatItem {
     // chat_dir: CIDirection,
@@ -81,7 +81,7 @@ pub struct ChatItem {
     _unknown_fields: HashMap<String, JsonValue>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Chat {
     chat_info: ChatInfo,
