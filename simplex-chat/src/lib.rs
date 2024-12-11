@@ -10,6 +10,7 @@ pub use responses::*;
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
+    future::Future,
     sync::{
         atomic::{AtomicU64, Ordering},
         Arc, Mutex,
@@ -184,7 +185,10 @@ impl ChatClient {
         Ok(resp)
     }
 
-    pub async fn listen(self, message_listener_callback: impl Fn(ChatSrvResponse) -> ()) {
+    pub async fn listen<F: Future<Output = ()>>(
+        self,
+        message_listener_callback: impl Fn(ChatSrvResponse) -> F,
+    ) {
         loop {
             let message = self.message_queue.recv().unwrap();
             message_listener_callback(message);
