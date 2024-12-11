@@ -62,6 +62,7 @@ pub enum ChatInfo {
         _unknown_fields: HashMap<String, JsonValue>,
     },
     Group {
+        group: GroupInfo,
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
@@ -71,6 +72,61 @@ pub enum ChatInfo {
     },
     #[serde(untagged)]
     Unknown(JsonValue),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupInfo {
+    pub group_id: u64,
+    pub local_display_name: String,
+    pub group_profile: GroupProfile,
+    pub membership: GroupMember,
+    // pub created_at: Date, // TODO: Pick date type
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupProfile {
+    pub display_name: String,
+    pub full_name: String,
+    pub image: Option<String>,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupMember {
+    pub group_member_id: u64,
+    pub member_id: String,
+    pub member_role: GroupMemberRole,
+    pub local_display_name: String,
+    pub member_profile: Profile,
+    pub member_contact_id: Option<u64>,
+    pub active_conn: Option<Connection>,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+pub enum GroupMemberRole {
+    Member,
+    Admin,
+    Owner,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Profile {
+    display_name: String,
+    full_name: String,
+    image: Option<String>,
+    contact_link: Option<String>,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -160,4 +216,10 @@ pub enum ChatError {
 pub enum ChatErrorType {
     NoActiveUser,
     ActiveUserExists,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Connection {
+    pub conn_id: u64,
 }
