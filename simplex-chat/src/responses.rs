@@ -48,6 +48,12 @@ pub enum ChatResponse {
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
+    ReceivedGroupInvitation {
+        user: User,
+        group_info: GroupInfo,
+        contact: Contact,
+        member_role: GroupMemberRole,
+    },
     UserContactLink {
         user: User,
         contact_link: UserContactLink,
