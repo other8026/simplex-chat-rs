@@ -42,6 +42,13 @@ pub enum ChatResponse {
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
+    ContactConnected {
+        contact: Contact,
+        user: User,
+        user_custom_profile: Option<Profile>,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
     NewChatItems {
         user: User,
         chat_items: Vec<ChatItem>,
@@ -53,6 +60,8 @@ pub enum ChatResponse {
         group_info: GroupInfo,
         contact: Contact,
         member_role: GroupMemberRole,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
     },
     UserContactLink {
         user: User,
