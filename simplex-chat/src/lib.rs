@@ -184,7 +184,7 @@ impl ChatClient {
         Ok(resp)
     }
 
-    pub async fn listen(&mut self, message_listener_callback: impl Fn(ChatSrvResponse) -> ()) {
+    pub async fn listen(self, message_listener_callback: impl Fn(ChatSrvResponse) -> ()) {
         loop {
             let message = self.message_queue.recv().unwrap();
             message_listener_callback(message);
