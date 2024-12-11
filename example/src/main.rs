@@ -1,5 +1,9 @@
 use anyhow::Result;
-use simplex_chat::ChatClient;
+use simplex_chat::{ChatClient, ChatSrvResponse};
+
+async fn message_listener_callback(server_response: ChatSrvResponse) {
+    println!("NEW SERVER MESSAGE: {:?}", server_response)
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -21,8 +25,7 @@ async fn main() -> Result<()> {
     // let chats = chat.api_chats().await?;
     // println!("Chats: {:?}", chats);
 
-    chat.listen(|srv_resp| println!("NEW SERVER MESSAGE: {:?}", srv_resp))
-        .await;
+    chat.listen(message_listener_callback).await;
 
     Ok(())
 }
