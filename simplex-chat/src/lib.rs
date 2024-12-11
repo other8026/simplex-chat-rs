@@ -10,7 +10,6 @@ pub use responses::*;
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
-    future::Future,
     sync::{
         atomic::{AtomicU64, Ordering},
         Arc, Mutex,
