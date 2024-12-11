@@ -24,6 +24,7 @@ use tokio_tungstenite::{connect_async, tungstenite::Message, MaybeTlsStream, Web
 type ChatWebSocket = WebSocketStream<MaybeTlsStream<TcpStream>>;
 
 type CorrId = String;
+type MessageQueue = mpsc::Receiver<ChatSrvResponse>;
 
 #[derive(Debug)]
 pub struct ChatClient {
@@ -33,7 +34,7 @@ pub struct ChatClient {
     write_stream: SplitSink<ChatWebSocket, Message>,
     listener_handle: JoinHandle<()>,
     command_waiters: Arc<Mutex<HashMap<CorrId, mpsc::Sender<ChatResponse>>>>,
-    message_queue: mpsc::Receiver<ChatSrvResponse>, // Note that command_waiters has precedence over message_queue
+    message_queue: MessageQueue, // Note that command_waiters has precedence over message_queue
 }
 
 #[derive(Serialize, Debug)]
@@ -185,14 +186,8 @@ impl ChatClient {
         Ok(resp)
     }
 
-    pub async fn listen<F: Future<Output = ()>>(
-        self,
-        message_listener_callback: impl Fn(ChatSrvResponse) -> F,
-    ) {
-        loop {
-            let message = self.message_queue.recv().unwrap();
-            message_listener_callback(message);
-        }
+    pub async fn next_message(&mut self) -> Result<ChatSrvResponse> {
+        Ok(self.message_queue.recv()?)
     }
 
     // Simplified APIs
