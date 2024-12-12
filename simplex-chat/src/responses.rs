@@ -51,7 +51,7 @@ pub enum ChatResponse {
     },
     NewChatItems {
         user: User,
-        chat_items: Vec<ChatItem>,
+        chat_items: Vec<AChatItem>,
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },

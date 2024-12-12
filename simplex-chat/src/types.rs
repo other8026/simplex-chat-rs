@@ -131,8 +131,50 @@ pub struct Profile {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
+pub struct AChatItem {
+    pub chat_info: ChatInfo,
+    pub chat_item: ChatItem,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct ChatItem {
-    // chat_dir: CIDirection,
+    pub chat_dir: Direction,
+    pub meta: Meta,
+    // pub content: CIContent,
+    // pub formatted_text: Option<Vec<FormattedText>>,
+    // pub quoted_item: Option<CIQuote>
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+#[serde(tag = "type")]
+pub enum Direction {
+    DirectSnd,
+    DirectRcv,
+    GroupSnd,
+    GroupRcv {
+        group_member: GroupMember,
+    },
+    #[serde(untagged)]
+    Unknown(JsonValue),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Meta {
+    pub item_id: u64,
+    // item_ts: Date, // TODO: Pick date
+    pub item_text: String,
+    // item_status: CIStatus,
+    // created_at: Date,
+    pub item_deleted: bool,
+    pub item_edited: bool,
+    pub editable: bool,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
 }

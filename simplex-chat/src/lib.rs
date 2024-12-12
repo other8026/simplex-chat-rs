@@ -46,8 +46,8 @@ struct ChatSrvRequest {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChatSrvResponse {
-    corr_id: Option<CorrId>,
-    resp: ChatResponse,
+    pub corr_id: Option<CorrId>,
+    pub resp: ChatResponse,
 }
 
 impl ChatClient {
