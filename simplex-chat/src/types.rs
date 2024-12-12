@@ -62,7 +62,7 @@ pub enum ChatInfo {
         _unknown_fields: HashMap<String, JsonValue>,
     },
     Group {
-        group: GroupInfo,
+        group_info: GroupInfo,
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },

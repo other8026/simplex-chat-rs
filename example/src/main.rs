@@ -1,10 +1,10 @@
 use anyhow::Result;
-use simplex_chat::ChatClient;
+use simplex_chat::{ChatClient, ChatInfo};
 
 async fn process_messages(mut chat: ChatClient) -> Result<()> {
     loop {
         let message = chat.next_message().await?;
-        println!("Received message: {:?}", message);
+        // println!("Received message: {:?}", message);
     }
 }
 
@@ -12,9 +12,6 @@ async fn process_messages(mut chat: ChatClient) -> Result<()> {
 async fn main() -> Result<()> {
     env_logger::init();
     let mut chat = ChatClient::start("ws://localhost:5225").await?;
-
-    // let resp = chat.send_command("/chats").await?;
-    // println!("Response: {:#?}", resp);
 
     let user = chat.api_get_active_user().await?;
     println!("Active User: {:?}", user);
@@ -25,8 +22,19 @@ async fn main() -> Result<()> {
     };
     println!("Address: {:?}", address);
 
-    // let chats = chat.api_chats().await?;
-    // println!("Chats: {:?}", chats);
+    let chats = chat
+        .api_chats()
+        .await?
+        .into_iter()
+        .filter_map(|c| match c.chat_info {
+            ChatInfo::Direct { contact, .. } => Some(format!("@{}", contact.local_display_name)),
+            ChatInfo::Group { group_info, .. } => {
+                Some(format!("#{}", group_info.group_profile.display_name))
+            }
+            _ => None,
+        })
+        .collect::<Vec<String>>();
+    println!("Chats: {:?}", chats);
 
     process_messages(chat).await?;
 
