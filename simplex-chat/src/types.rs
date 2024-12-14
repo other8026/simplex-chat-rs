@@ -172,7 +172,7 @@ pub struct Meta {
     pub item_text: String,
     // item_status: CIStatus,
     // created_at: Date,
-    pub item_deleted: bool,
+    // pub item_deleted: bool,
     pub item_edited: bool,
     pub editable: bool,
     #[serde(flatten)]

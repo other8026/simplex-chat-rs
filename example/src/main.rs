@@ -4,11 +4,11 @@ use simplex_chat::{ChatClient, ChatInfo, ChatResponse};
 async fn process_messages(mut chat: ChatClient) -> Result<()> {
     loop {
         let message = chat.next_message().await?;
-        // println!("Received message: {:#?}", message);
-        println!("Received message");
+        println!("Received message: {:#?}", message);
 
         match message.resp {
             ChatResponse::NewChatItems { chat_items, .. } => {
+                println!("CHATITEMS");
                 for chat_item in chat_items {
                     println!("New message: {}", chat_item.chat_item.meta.item_text);
                 }
