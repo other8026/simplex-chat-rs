@@ -11,6 +11,7 @@ async fn process_messages(mut chat: ChatClient) -> Result<()> {
                 println!("CHATITEMS");
                 for chat_item in chat_items {
                     println!("New message: {}", chat_item.chat_item.meta.item_text);
+                    println!("Message date: {}", chat_item.chat_item.meta.item_ts);
                 }
             }
             _ => {}

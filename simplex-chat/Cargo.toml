@@ -13,6 +13,7 @@ categories = ["web-programming::websocket", "asynchronous", "api-bindings"]
 
 [dependencies]
 anyhow = "1.0.93"
+chrono = { version = "0.4.39", features = ["serde"] }
 futures-util = "0.3.31"
 log = "0.4.22"
 serde = { version = "1.0.215", features = ["derive"] }

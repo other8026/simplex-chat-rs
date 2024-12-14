@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 use std::collections::HashMap;
@@ -168,7 +169,7 @@ pub enum Direction {
 #[serde(rename_all = "camelCase")]
 pub struct Meta {
     pub item_id: u64,
-    // item_ts: Date, // TODO: Pick date
+    pub item_ts: DateTime<Utc>, // TODO: Pick date
     pub item_text: String,
     // item_status: CIStatus,
     // created_at: Date,
