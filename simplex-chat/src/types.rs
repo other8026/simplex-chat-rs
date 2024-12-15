@@ -77,6 +77,15 @@ pub enum ChatInfo {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
+pub struct Group {
+    pub group_info: GroupInfo,
+    pub members: Vec<GroupMember>,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct GroupInfo {
     pub group_id: u64,
     pub local_display_name: String,
