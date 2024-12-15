@@ -80,6 +80,8 @@ pub enum ChatInfo {
 pub struct Group {
     pub group_info: GroupInfo,
     pub members: Vec<GroupMember>,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
