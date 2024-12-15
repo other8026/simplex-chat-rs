@@ -49,6 +49,12 @@ pub enum ChatResponse {
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
+    GroupMembers {
+        user: User,
+        group: Group,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
     NewChatItems {
         user: User,
         chat_items: Vec<AChatItem>,
