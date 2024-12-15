@@ -123,6 +123,7 @@ pub struct GroupMember {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
 pub enum GroupMemberRole {
+    Observer,
     Member,
     Admin,
     Owner,
