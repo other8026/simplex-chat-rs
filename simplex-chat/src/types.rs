@@ -123,6 +123,9 @@ pub struct GroupMember {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
 pub enum GroupMemberRole {
+    // role used for unknown profiles in group
+    // (e.g. forwarded messages from member no longer in the group)
+    Author,
     Observer,
     Member,
     Admin,
