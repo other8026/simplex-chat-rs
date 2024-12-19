@@ -130,6 +130,8 @@ pub enum GroupMemberRole {
     Member,
     Admin,
     Owner,
+    #[serde(untagged)]
+    Unknown(JsonValue),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -264,6 +266,7 @@ pub enum ChatError {
     ErrorStore {
         store_error: JsonValue,
     },
+    #[serde(untagged)]
     Unknown(JsonValue),
 }
 
@@ -272,10 +275,14 @@ pub enum ChatError {
 pub enum ChatErrorType {
     NoActiveUser,
     ActiveUserExists,
+    #[serde(untagged)]
+    Unknown(JsonValue),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Connection {
     pub conn_id: u64,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
