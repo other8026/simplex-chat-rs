@@ -232,6 +232,16 @@ impl ChatClient {
 
         Ok(conn_req_contact)
     }
+
+    pub async fn api_list_members(&mut self, group_id: u64) -> Result<Vec<GroupMember>> {
+        let cmd = format!("/_members #{}", group_id);
+        let resp = self.send_command(&cmd).await?;
+        let ChatResponse::GroupMembers { group, .. } = resp else {
+            bail!("The command response does not match the expected type");
+        };
+
+        Ok(group.members)
+    }
 }
 
 impl Drop for ChatClient {

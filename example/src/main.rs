@@ -47,6 +47,9 @@ async fn main() -> Result<()> {
         .collect::<Vec<String>>();
     println!("Chats: {:?}", chats);
 
+    let members = chat.api_list_members(1).await?;
+    println!("Members of group ID '1': {:?}", members);
+
     process_messages(chat).await?;
 
     Ok(())
