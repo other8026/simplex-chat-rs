@@ -137,10 +137,10 @@ pub enum GroupMemberRole {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Profile {
-    display_name: String,
-    full_name: String,
-    image: Option<String>,
-    contact_link: Option<String>,
+    pub display_name: String,
+    pub full_name: String,
+    pub image: Option<String>,
+    pub contact_link: Option<String>,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
 }
