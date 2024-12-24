@@ -27,6 +27,7 @@ pub enum ChatResponse {
     ChatItemUpdated {
         user: User,
         chat_item: AChatItem,
+        #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
     ChatRunning {
