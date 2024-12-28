@@ -24,6 +24,12 @@ pub enum ChatResponse {
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
+    ChatItemUpdated {
+        user: User,
+        chat_item: AChatItem,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
     ChatRunning {
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
