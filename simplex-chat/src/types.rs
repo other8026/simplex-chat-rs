@@ -166,22 +166,36 @@ pub struct ChatItem {
     pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
+// all are found here https://github.com/simplex-chat/simplex-chat/blob/v6.2.3/src/Simplex/Chat/Messages/CIContent.hs#L398
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
 #[serde(tag = "type")]
 pub enum CIContent {
-    MsgContent(MsgContent),
-    GroupInvitation {
-        group_id: i64,
-        group_member_id: i64,
-        local_display_name: String,
-        group_profile: GroupProfile,
-        status: CIGroupInvitationStatus,
+    RcvGroupInvitation {
+        group_invitation: GroupInvitation,
+        member_role: GroupMemberRole,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    RcvMsgContent {
+        msg_content: MsgContent,
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
     #[serde(untagged)]
     Unknown(JsonValue),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct GroupInvitation {
+    pub group_id: i64,
+    pub group_member_id: i64,
+    pub local_display_name: String,
+    pub group_profile: GroupProfile,
+    pub status: CIGroupInvitationStatus,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -255,6 +269,7 @@ pub struct AutoAccept {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+#[serde(tag = "type")]
 pub enum MsgContent {
     Text {
         text: String,
