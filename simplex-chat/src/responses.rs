@@ -55,6 +55,13 @@ pub enum ChatResponse {
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
+    GroupMemberInfo {
+        user: User,
+        group_info: GroupInfo,
+        member: GroupMember,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
     GroupMembers {
         user: User,
         group: Group,
