@@ -159,11 +159,41 @@ pub struct AChatItem {
 pub struct ChatItem {
     pub chat_dir: Direction,
     pub meta: Meta,
-    // pub content: CIContent,
+    pub content: CIContent,
     // pub formatted_text: Option<Vec<FormattedText>>,
     // pub quoted_item: Option<CIQuote>
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+#[serde(tag = "type")]
+pub enum CIContent {
+    MsgContent(MsgContent),
+    GroupInvitation {
+        group_id: i64,
+        group_member_id: i64,
+        local_display_name: String,
+        group_profile: GroupProfile,
+        status: CIGroupInvitationStatus,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    #[serde(untagged)]
+    Unknown(JsonValue),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+#[serde(tag = "type")]
+pub enum CIGroupInvitationStatus {
+    Pending,
+    Accepted,
+    Rejected,
+    Expired,
+    #[serde(untagged)]
+    Unknown(JsonValue),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
