@@ -6,7 +6,7 @@ use std::collections::HashMap;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct LocalProfile {
-    pub profile_id: u64,
+    pub profile_id: i64,
     pub display_name: String,
     pub full_name: String,
     pub image: Option<String>,
@@ -19,9 +19,9 @@ pub struct LocalProfile {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
-    pub user_id: u64,
+    pub user_id: i64,
     pub agent_user_id: String,
-    pub user_contact_id: u64,
+    pub user_contact_id: i64,
     pub local_display_name: String,
     pub profile: LocalProfile,
     pub active_user: bool,
@@ -35,7 +35,7 @@ pub struct User {
 #[serde(rename_all = "camelCase")]
 pub struct UserInfo {
     pub user: User,
-    pub unread_count: u64,
+    pub unread_count: i64,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
 }
@@ -43,11 +43,11 @@ pub struct UserInfo {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Contact {
-    pub contact_id: u64,
+    pub contact_id: i64,
     pub local_display_name: String,
     // profile: Profile,
     // active_conn: Connection,
-    pub via_group: Option<u64>,
+    pub via_group: Option<i64>,
     // created_at: Date,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
@@ -87,7 +87,7 @@ pub struct Group {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupInfo {
-    pub group_id: u64,
+    pub group_id: i64,
     pub local_display_name: String,
     pub group_profile: GroupProfile,
     pub membership: GroupMember,
@@ -109,12 +109,12 @@ pub struct GroupProfile {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupMember {
-    pub group_member_id: u64,
+    pub group_member_id: i64,
     pub member_id: String,
     pub member_role: GroupMemberRole,
     pub local_display_name: String,
     pub member_profile: Profile,
-    pub member_contact_id: Option<u64>,
+    pub member_contact_id: Option<i64>,
     pub active_conn: Option<Connection>,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
@@ -183,7 +183,7 @@ pub enum Direction {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Meta {
-    pub item_id: u64,
+    pub item_id: i64,
     pub item_ts: DateTime<Utc>, // TODO: Pick date
     pub item_text: String,
     // item_status: CIStatus,
@@ -282,7 +282,7 @@ pub enum ChatErrorType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Connection {
-    pub conn_id: u64,
+    pub conn_id: i64,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
 }
