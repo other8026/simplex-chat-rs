@@ -191,6 +191,7 @@ pub struct Meta {
     // pub item_deleted: bool,
     pub item_edited: bool,
     pub editable: bool,
+    pub item_deleted: Option<CIDeleted>,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
 }
@@ -212,6 +213,35 @@ pub struct ChatItemDeletion {
     pub to_chat_item: Option<AChatItem>,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase", rename_all_fields = "camelCase")]
+#[serde(tag = "type")]
+pub enum CIDeleted {
+    Deleted {
+        deleted_ts: Option<DateTime<Utc>>,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    Blocked {
+        deleted_ts: Option<DateTime<Utc>>,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    BlockedByAdmin {
+        deleted_ts: Option<DateTime<Utc>>,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    Moderated {
+        deleted_ts: Option<DateTime<Utc>>,
+        by_group_member: GroupMember,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
+    #[serde(untagged)]
+    Unknown(JsonValue),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
