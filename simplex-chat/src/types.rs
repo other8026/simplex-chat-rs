@@ -252,8 +252,8 @@ pub struct Chat {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChatItemDeletion {
-    deleted_chat_item: AChatItem,
-    to_chat_item: Option<AChatItem>,
+    pub deleted_chat_item: AChatItem,
+    pub to_chat_item: Option<AChatItem>,
     #[serde(flatten)]
     pub _unknown_fields: HashMap<String, JsonValue>,
 }
