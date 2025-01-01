@@ -210,6 +210,8 @@ pub struct Chat {
 pub struct ChatItemDeletion {
     deleted_chat_item: AChatItem,
     to_chat_item: Option<AChatItem>,
+    #[serde(flatten)]
+    pub _unknown_fields: HashMap<String, JsonValue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
