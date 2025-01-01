@@ -207,6 +207,13 @@ pub struct Chat {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
+pub struct ChatItemDeletion {
+    deleted_chat_item: AChatItem,
+    to_chat_item: Option<AChatItem>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct UserContactLink {
     pub conn_req_contact: String,
     pub auto_accept: Option<AutoAccept>,

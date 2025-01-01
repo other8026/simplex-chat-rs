@@ -42,6 +42,14 @@ pub enum ChatResponse {
         #[serde(flatten)]
         _unknown_fields: HashMap<String, JsonValue>,
     },
+    ChatItemsDeleted {
+        user: User,
+        chat_item_deletions: Vec<ChatItemDeletion>,
+        by_user: bool,
+        timed: bool,
+        #[serde(flatten)]
+        _unknown_fields: HashMap<String, JsonValue>,
+    },
     ContactConnected {
         contact: Contact,
         user: User,
